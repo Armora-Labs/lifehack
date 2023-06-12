@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const apiController = require('../controllers/apiController')
 
-router.get('/',
+router.get('/:category',
   apiController.getData,
   (req, res, next) => {
     res.status(200).json(res.locals.data)
@@ -14,7 +14,7 @@ router.post('/',
     res.status(200).send([])
   })
 
-  router.get('/user',
+  router.get('/user/:user',
   apiController.getUser,
   (req, res, next) => {
     res.status(200).json(res.locals.data)

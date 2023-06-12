@@ -44,9 +44,28 @@ const App = () => {
   // If we have no user: sign in button
   // If we have a user: show the log out button
 
+  async function makeUser(e) {
+    e.preventDefault();
+    const name = document.getElementById('create-account-input').value;
+    const fetchProps = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({name})
+    };
+    const newUser = await fetch('/api/user', fetchProps).then(ans => ans.json());
+    console.log('New User; ', newUser[0]);
+    setUser(newUser[0]);
+  }
+
+  // async function loginUser() {}
+  
+
+  // async function oauthUser() {}
+
   return (
     <Router>
       <NavBar />
+      <h3>{user.username}</h3>
       <div id="signInDiv"></div>
       { Object.keys(user).length != 0 &&
         <button id="signOutBttn" onClick={ e => handleSignOut(e)}>Sign Out</button>
@@ -59,10 +78,15 @@ const App = () => {
         </div>
       }
       <Switch>
-        <Route path="/" component={Login} />
-        {/* <Route path="/base" component={MainDisplay} />
-        <Route path="/create" component={CreateHack} />
-        <Route path="/categories" component={Login} />  */}
+        <Route path="/">
+          <Login makeUser={makeUser} />
+        </Route>
+        {/* <Route path="/dashboard" element={<Dashboard authed={true} />} /> */}
+        {/* <Route path="/" element={<Login makeUser={makeUser}/>}/> */}
+          {/* <Route path="/" component={Login} makeUser={makeUser}/> */}
+          {/* <Route path="/base" component={MainDisplay} />
+          <Route path="/create" component={CreateHack} />
+          <Route path="/categories" component={Login} />  */}
       </Switch>
       <MainDisplay />
       <HackCreator />
