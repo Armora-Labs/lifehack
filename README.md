@@ -36,3 +36,15 @@ googlename varchar(1000),
 username varchar(1000) UNIQUE
 );
 CREATE TABLE
+
+
+
+
+google client id
+
+745677008135-28koou137ibajp5jnjalltuu1slpbsde.apps.googleusercontent.com
+
+
+google client secret
+
+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
