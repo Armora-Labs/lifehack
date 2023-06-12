@@ -5,9 +5,9 @@ const Login = ({ makeUser }) => {
      <div className="logins">
         <div>
             <form method='POST' action='/login'>
-                <input className="username" name="username" type="text" placeholder="username"></input>
+                <input id='login-account-input'className="username" name="username" type="text" placeholder="username"></input>
                 <input name="password" type="password"></input>
-                <input className="button" type="submit" value="Log in"></input>
+                <input className="button" type="submit" value="Log in" onClick={loginUser}></input>
             </form>
         </div>
 
