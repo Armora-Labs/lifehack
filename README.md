@@ -10,9 +10,9 @@ Use single quotes when inserting strings
 INSERT INTO hacks (ID, content, likes, dislikes, user_id, category_id) VALUES (2,'love yourself', 0,0, 1, 1);
 
 SQL Tables Cheat Sheet:											
-Categories	ID	Name				
-users	ID	googlename	username								
-hacks	ID	content	likes	dislikes	user_id	category_id
+Categories: ID,	Name
+users:	ID, googlename, username
+hacks:	ID, content, likes, dislikes, user_id, category_id
 
 
 
