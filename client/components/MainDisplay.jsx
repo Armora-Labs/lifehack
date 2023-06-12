@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import HackCreator from './HackCreator';
+
+// Remove this if/when move Drop Down
 import NavBar from './NavBar';
 
 const MainDisplay = () => {
-  return <div className="displayContainer">Check Main Display</div>;
+  //   return <div className="displayContainer">Check Main Display</div>;
 
-  // Need to get the handleChange event info from NavBar passed here
+  // Need to get the handleChange event info from NavBar passed here (Move Drop down menu to here?)
 
   const [hacks, setHack] = useState([]);
 
@@ -27,22 +29,3 @@ const MainDisplay = () => {
 };
 
 export default MainDisplay;
-
-/* To Build List
-    Login Page 
-        - H1 Welcome to LifeHack
-        -login / create user OAuth path
-
-    Category Bar - functionality to  each category
-        - Associated Fetch request + event
-        - Event trigger to the hack display container
-
-
-    Hack Display Container
-        - in fetch request have it create individual child compenents for each hack
-            - each individual hack will have: like, down vote, edit, delete buttons
-
-    Refresh button associated with Hack Display Container?
-
-
-*/

@@ -7,7 +7,8 @@ import MainDisplay from './components/MainDisplay';
 
 const App = () => {
   // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
-  // const [user, setUser] = useState({})
+  const [dropdown, setDropdownChoice] = React.useState({ Categories });
+  const [user, setUser] = useState({});
   // id, username
 
   return (
@@ -39,8 +40,22 @@ export default App;
 
       1. Move state to App and pass down through other components
       2. Finish set up and test Fetch request from Categories bar
-      3. Finish setting up Hack page for individual hack containers
       4. Double checking the imports and exports, style sheets nesting
       5. Clean up login page ahead of OAuth
+
+      const [user, setUser] -- useState({})
+
+
+      // to set the local state
+      useEffect(() => {
+        localStorage.setItem('user', JSON.stringify(user));
+      }, [user])
       
+      // to get item from the local state
+      useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          setItems(user);
+        } 
+      }, []);
 */

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const NavBar = () => {
   const [value, setValue] = React.useState('Categories');
 
-  //How do we get this handleChange info to MainDisplay?
+  //How do we get this handleChange info to MainDisplay? Move drop down to MainDisplay
 
   const handleChange = (event) => {
     event.prevent.Default();
