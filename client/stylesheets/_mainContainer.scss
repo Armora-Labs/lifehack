@@ -10,9 +10,30 @@ body {
   margin: 1em;
 }
 
+h1 {
+  text-align: center;
+}
+
+.gsignin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .categories {
+  border-radius: 5px;
   width: 10em;
   height: 5em;
   font-size: 1.1rem;
   text-align: center;
+}
+
+.catselector {
+  border: 1px solid grey;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2em;
 }
