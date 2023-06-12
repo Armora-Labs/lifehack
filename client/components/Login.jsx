@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Login = () => {
+const Login = ({ makeUser }) => {
   return (
      <div className="logins">
         <div>
@@ -13,9 +13,9 @@ const Login = () => {
 
         <div>
             <form method='POST' action='/signup'>
-                <input name="username" type="text" placeholder="username"></input>
+                <input id='create-account-input' name="username" type="text" placeholder="username"></input>
                 <input name="password" type="password"></input>
-                <input className="button" type="submit" value="Create Account"></input>
+                <input className="button" type="submit" value="Create Account" onClick={makeUser}></input>
             </form>
         </div>
     {/* <mainContainer /> */}
