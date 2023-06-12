@@ -6,20 +6,41 @@ import HackCreator from './components/HackCreator';
 import MainDisplay from './components/MainDisplay';
 import { useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
+import { set } from 'lodash';
 
 const App = () => {
   // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
   const [user, setUser] = useState({})
   // id, username
 
-  function handleCallbackResponse(response) {
-    console.log('whole response: ', response);
-    console.log('Encoded JWT ID token: ' + response.credential);
+  async function handleCallbackResponse(response) {
+    // console.log('whole response: ', response);
+    // console.log('Encoded JWT ID token: ' + response.credential);
     const userObject = jwtDecode(response.credential);
-    console.log(userObject)
-    setUser(userObject)
-    document.getElementById('signInDiv').hidden = true;
-    
+    // console.log(userObject);
+    const googlename = userObject.name;
+    console.log('googlename', googlename);
+    let googleuser;
+    googleuser = await fetch(`api/user/${googlename}`);
+    const checkIfUserExists = await googleuser.json();
+    // console.log('response in handlecallback', scheckIfUserExists);
+    if (checkIfUserExists.length > 0) {
+      console.log('user already exists')
+      document.getElementById('signInDiv').hidden = true;
+      setUser(checkIfUserExists[0]);
+    }
+    else {
+      const fetchProps = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({name: googlename})
+      };
+      const responseFromCreatingUser = await fetch(`api/user/`, fetchProps);
+      googleuser = await responseFromCreatingUser.json();
+      console.log('googleuser', googleuser[0]);
+      document.getElementById('signInDiv').hidden = true;
+      setUser(googleuser[0]);
+    } 
   }
 
   function handleSignOut(event) {
@@ -46,7 +67,8 @@ const App = () => {
 
   async function makeUser(e) {
     e.preventDefault();
-    const name = document.getElementById('create-account-input').value;
+    const input = document.getElementById('create-account-input');
+    const name = input.value;
     const fetchProps = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -55,12 +77,38 @@ const App = () => {
     const newUser = await fetch('/api/user', fetchProps).then(ans => ans.json());
     console.log('New User; ', newUser[0]);
     setUser(newUser[0]);
+    input.value = '';
   }
 
-  // async function loginUser() {}
+  async function loginUser(e) {
+    e.preventDefault();
+    const input = document.getElementById('login-account-input');
+    const response = await fetch(`/api/user/${input.value}`)
+    const user = await response.json();
+    console.log('Logged in user: ', user[0]);
+    setUser(user[0]);
+    input.value = '';
+  }
   
+  async function changeDisplayName(e) {
+    console.log('clicked displayname')
+    e.preventDefault();
+    const input = document.getElementById('change-displayname');
+    // console.log(input.value);
+    const displayName = input.value;
+    const fetchProps = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({id: user.id, newUsername: displayName})
+    };
+    const response = await fetch(`/api/user/`, fetchProps)
+    const displayNameAfter = await response.json();
+    console.log('Changed user: ', displayNameAfter[0]);
+    setUser(displayNameAfter[0]);
+    input.value = '';
+  }
 
-  // async function oauthUser() {}
+
 
   return (
     <Router>
@@ -68,7 +116,11 @@ const App = () => {
       <h3>{user.username}</h3>
       <div id="signInDiv"></div>
       { Object.keys(user).length != 0 &&
+      <>
         <button id="signOutBttn" onClick={ e => handleSignOut(e)}>Sign Out</button>
+        <input id='change-displayname'/>
+        <button id='change-displayname-bttn' onClick={changeDisplayName}>Change Display Name</button>
+      </>
       }
       
       { user && 
@@ -79,7 +131,7 @@ const App = () => {
       }
       <Switch>
         <Route path="/">
-          <Login makeUser={makeUser} />
+          <Login makeUser={makeUser} loginUser={loginUser}/>
         </Route>
         {/* <Route path="/dashboard" element={<Dashboard authed={true} />} /> */}
         {/* <Route path="/" element={<Login makeUser={makeUser}/>}/> */}
