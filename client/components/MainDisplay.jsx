@@ -1,12 +1,14 @@
 import React from 'react';
 import HackCreator from './HackCreator';
+import Hack from './Hack'
 
 
 
 const MainDisplay = () => {
   return (
     <div className="displayContainer">
-        Check Main Display
+        <HackCreator />
+        <Hack />
     </div>
     
   )

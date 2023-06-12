@@ -9,3 +9,14 @@ body {
     margin: 1em;
 
 }
+
+.hackContainer {
+    border: 1px solid grey;
+    box-shadow: 5px 5px 10px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 69%;
+    width: 69%;
+    margin: 1em auto;
+}

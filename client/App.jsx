@@ -8,8 +8,6 @@ import MainDisplay from './components/MainDisplay'
 
 const App = () => {
 
-  // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
-
   return (
     <Router>
       <NavBar />
@@ -19,7 +17,7 @@ const App = () => {
         <Route path="/create" component={CreateHack} />
         <Route path="/categories" component={Login} />  */}
       </Switch>
-      <HackCreator />
+      <MainDisplay />
     </Router>
     // <mainContainer />
   )
