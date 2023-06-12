@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+<<<<<<< HEAD
 const Hack = () => {
     // states to change
         // current hack, setHack = useState('')
@@ -22,3 +23,11 @@ const Hack = () => {
 
 
 export default Hack;
+=======
+const Hack = (props) => {
+
+    
+};
+
+export default Hack;
+>>>>>>> Dev
