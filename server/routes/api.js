@@ -14,4 +14,22 @@ router.post('/',
     res.status(200).send([])
   })
 
+  router.get('/user',
+  apiController.getUser,
+  (req, res, next) => {
+    res.status(200).json(res.locals.data)
+  })
+
+  router.post('/user',
+  apiController.makeUser,
+  (req, res, next) => {
+    res.status(200).json(res.locals.data)
+  })
+
+  router.patch('/user',
+  apiController.changeUsername,
+  (req, res, next) => {
+    res.status(200).json(res.locals.data)
+  })
+
 module.exports = router
