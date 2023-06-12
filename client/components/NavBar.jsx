@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
 
 const NavBar = () => {
-  const [value, setValue] = React.useState('Categories');
+  // const [value, setValue] = React.useState('');
 
   //How do we get this handleChange info to MainDisplay? Move drop down to MainDisplay
 
   const handleChange = (event) => {
-    event.prevent.Default();
+    event.preventDefault();
 
     setValue(event.target.value); // should 'targe' be 'target'?
+    console.log(event.target.value);
   };
 
   return (
@@ -27,7 +28,7 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+// export default NavBar;
 
 // not sure if this is the right way to word this fetch request
 // might be better moved to the MainDisplay with value passed in state to MainDisplay

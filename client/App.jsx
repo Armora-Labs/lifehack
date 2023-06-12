@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './components/Login';
-import NavBar from './components/NavBar';
 import HackCreator from './components/HackCreator';
 import MainDisplay from './components/MainDisplay';
 import { useEffect, useState } from 'react';
@@ -46,7 +45,6 @@ const App = () => {
 
   return (
     <Router>
-      <NavBar />
       <div id="signInDiv"></div>
       { Object.keys(user).length != 0 &&
         <button id="signOutBttn" onClick={ e => handleSignOut(e)}>Sign Out</button>
