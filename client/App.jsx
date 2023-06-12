@@ -4,16 +4,60 @@ import Login from './components/Login';
 import NavBar from './components/NavBar';
 import HackCreator from './components/HackCreator';
 import MainDisplay from './components/MainDisplay';
+import { useEffect, useState } from 'react';
+import jwtDecode from 'jwt-decode';
 
 const App = () => {
   // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
-  const [dropdown, setDropdownChoice] = React.useState({ Categories });
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({})
   // id, username
+
+  function handleCallbackResponse(response) {
+    console.log('whole response: ', response);
+    console.log('Encoded JWT ID token: ' + response.credential);
+    const userObject = jwtDecode(response.credential);
+    console.log(userObject)
+    setUser(userObject)
+    document.getElementById('signInDiv').hidden = true;
+    
+  }
+
+  function handleSignOut(event) {
+    setUser({});
+    document.getElementById("signInDiv").hidden = false;
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: '745677008135-28koou137ibajp5jnjalltuu1slpbsde.apps.googleusercontent.com',
+      callback: handleCallbackResponse
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('signInDiv'),
+      {theme: 'outline', size: 'large'}
+    );
+
+    google.accounts.id.prompt();
+  }, []);
+  // If we have no user: sign in button
+  // If we have a user: show the log out button
 
   return (
     <Router>
       <NavBar />
+      <div id="signInDiv"></div>
+      { Object.keys(user).length != 0 &&
+        <button id="signOutBttn" onClick={ e => handleSignOut(e)}>Sign Out</button>
+      }
+      
+      { user && 
+        <div>
+          <img src = {user.picture}/>
+          <h3>{user.name}</h3>
+        </div>
+      }
       <Switch>
         <Route path="/" component={Login} />
         {/* <Route path="/base" component={MainDisplay} />
