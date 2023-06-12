@@ -4,13 +4,16 @@ const controller = {}
 
 // Get data from the database:
 
+
+
 controller.getData = (req, res, next) => {
   // const SQLQuery = `
   // SELECT * FROM hacks
   // `
 
+  console.log('Category: ', req.params);
   // How will request come in?  req.body
-  const category = 'Money'
+  const category = req.params.category;
 
   // hacks: content, likes, dislikes // h
   // users: username // u
@@ -82,9 +85,10 @@ controller.makeUser = (req, res, next) => {
       return next()
     })
 }
-
+// http://localhost:8080/api/user/batman
 controller.getUser = (req, res, next) => {
-  const {name} = req.body;
+  const name = req.params.user;
+  console.log('name in getUser', name)
   const getUserQuery =  `SELECT id, username FROM users WHERE googlename = '${name}'`
   db.query(getUserQuery)
     .then(data => {
