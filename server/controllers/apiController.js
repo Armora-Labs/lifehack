@@ -24,7 +24,7 @@ controller.getData = (req, res, next) => {
   ON C.ID = h.category_id;`
 
   // SQL query string to return all categories in database:
-  const categoryQuery = `SELECT h.content, h.likes, h.dislikes, u.username, C.Name AS category 
+  const categoryQuery = `SELECT h.ID, h.content, h.likes, h.dislikes, u.username, C.Name AS category 
   FROM hacks h INNER JOIN users u 
   ON u.ID = h.user_id
   INNER JOIN Categories C
@@ -58,7 +58,7 @@ controller.makeHack = (req, res, next) => {
   db.query(postHack)
     .then(data => {
       const { rows } = data
-      console.log('From Database: ', rows)
+      // console.log('From Database: ', rows)
       res.locals.data = rows
       return next()
     })
@@ -67,15 +67,54 @@ controller.makeHack = (req, res, next) => {
 
 // Post a new user to the database:
 controller.makeUser = (req, res, next) => {
-  const postUser = 'INSERT INTO hacks (ID, googlename, username) VALUES (nextval(\'user_sequence\'), *****, ***** );'
+  const {name} = req.body
+  // console.log('reqbody', req.body)
+  // console.log('name in makeuser', name)
+  // A SELECT query is required after the INSERT query to actually return the new user
+  const postUser = `INSERT INTO users (ID, googlename, username) VALUES (nextval(\'user_sequence\'),'${name}' ,'${name}');
+  SELECT * FROM users WHERE googlename = '${name}';`
   db.query(postUser)
     .then(data => {
-      const { rows } = data
-      console.log('From Database: ', rows)
+      // console.log('data in makeUser', data)
+      const { rows } = data[1]
+      // console.log('From Database: ', rows)
       res.locals.data = rows
       return next()
     })
 }
+
+controller.getUser = (req, res, next) => {
+  const {name} = req.body;
+  const getUserQuery =  `SELECT id, username FROM users WHERE googlename = '${name}'`
+  db.query(getUserQuery)
+    .then(data => {
+      // console.log('data from getusers', data)
+      const {rows} = data
+      res.locals.data = rows
+      return next();
+    }
+  )
+}
+
+
+controller.changeUsername = (req, res, next) => {
+  const {newUsername} = req.body
+  const {id} = req.body
+  // console.log('reqbody', req.body)
+  // A SELECT query is required after the INSERT query to actually return the new user
+  const postUser = `UPDATE users SET username = '${newUsername}' WHERE ID = ${id};
+  SELECT * FROM users WHERE ID = ${id};`
+  db.query(postUser)
+    .then(data => {
+      // console.log('data in makeUser', data)
+      const { rows } = data[1]
+      // console.log('From Database: ', rows)
+      res.locals.data = rows
+      return next()
+    })
+}
+
+
 
 module.exports = controller
 
