@@ -6,7 +6,7 @@
 
 body {
   background-color: pink;
-  border: 1px solid orange;
+  // border: 1px solid orange;
   margin: 1em;
 }
 
@@ -36,4 +36,35 @@ h1 {
   align-items: center;
   justify-content: center;
   margin-bottom: 1.2em;
+}
+
+.aHack {
+  border: 1px dotted grey;
+  border-radius: 5px;
+  background-color: #CB416B;
+  box-shadow: 5px 5px 10px #CB416B;
+  width: 23%;
+  height: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2em auto;
+  padding: 2em;
+}
+
+.username-hack {
+  font-weight: bolder;
+}
+
+
+.hack-items-container {
+  // border: 30px solid black;
+  // background-color: magenta;
+  display: flex;
+  // flex-wrap: wrap;
+  flex-flow: row wrap;
+  width: 90%;
+  padding: 5px;
+  margin: 5px;
 }

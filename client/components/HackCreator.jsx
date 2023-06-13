@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 
-const HackCreator = () => {
+const HackCreator = ({user}) => {
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('');
-  const [user, setUser] = useState('');
+  const [category, setCategory] = useState('Codesmith');
 
+
+  // Event handler for add new hack form submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
-
-    console.log({ content, category, user });
-    const postData = { category, content, user };
+    const u = user.username;
+    // console.log('content', content, 'category', category, 'user', u);
+    // console.log('this is user', user)
+    // console.log({ content, category, user });
+    const postData = { category, content, user: user.username};
     const addHack = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

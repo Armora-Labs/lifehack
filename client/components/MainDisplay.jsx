@@ -1,46 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import HackCreator from './HackCreator';
-
-// Remove this if/when move Drop Down
+import Hack from './Hack'
 
 const MainDisplay = () => {
   const [hacks, setHack] = useState([]);
   const [value, setValue] = useState('');
 
+  // Event handler for main category dropdown //
   const handleChange = (event) => {
+    console.log('category has been changed')
     event.preventDefault();
 
-    setValue(event.target.value); // should 'targe' be 'target'?
+    setValue(event.target.value); 
     console.log(event.target.value);
   };
 
-  const hackItems = [];
-  
-
+  // GET request to SQL for specific category hacks //
   async function getHacks() {
     try {
       const response = await fetch(`/api/${value}`);
       const data = await response.json();
       console.log(data);
-      // setHack(data);
+      setHack(data);
     } catch (err) {
       console.log(err);
     }
   }
+
+  // Trigger for page rerender once Category change is detected. //
+  useEffect(() => {
+    getHacks();
+  }, [value])
+
+  
+  const hackItems = [];
+  for (let i = 0; i < hacks.length; i++) {
+    hackItems.push(<Hack hacks={hacks[i]} />);
+  }
   getHacks();
 
-  // useEffect(() => {
-  //   fetch(`/${category}`)
-  //     .then((response) => response.json())
-  //     .then((data) => setHack(data));
-  // }, [category]);
+  // console.log('hacks', hacks);
+  // console.log('hackItems', hackItems);
 
-  // for (let i = 0; i < hacks.length; i++) {
-  //   hackItems.push(<Hack hacks={hacks[i]} />);
-  // }
-
+  // Category Dropdown Component //
   const CatSelector = () => {
     return (
+      <>
       <label>
         Choose a category:
         <select value={value} onChange={handleChange} className="categories">
@@ -50,15 +55,19 @@ const MainDisplay = () => {
           <option value="Money">Money</option>
         </select>
       </label>
+      
+      </>
     );
   };
 
+
+  // Main Hack Display Container Component //
   return (
     <>
       <div className="catselector">
         <CatSelector />
       </div>
-      <div>{hackItems}</div>
+      <div className='hack-items-container'>{hackItems}</div>
     </>
   );
 };
