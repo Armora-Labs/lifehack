@@ -3,16 +3,9 @@ const db = require('../models/models')
 const controller = {}
 
 // Get data from the database:
-
-
-
 controller.getData = (req, res, next) => {
-  // const SQLQuery = `
-  // SELECT * FROM hacks
-  // `
 
   console.log('Category: ', req.params);
-  // How will request come in?  req.body
   const category = req.params.category;
 
   // hacks: content, likes, dislikes // h
@@ -51,10 +44,6 @@ controller.makeHack = (req, res, next) => {
   const { category, content, user } = req.body
   console.log('Category: ', category, ' Content: ', content, ' User: ', user)
 
-  // const content = 'get a really noice jorb with lots o chedda'
-  // const category = 'Money'
-  // const user = 'mysteryio'
-
   // nextval is a method that generates the next primary key, pass it the sequence name
   const postHack = `INSERT INTO hacks (ID, content, likes, dislikes, user_id, category_id) VALUES (nextval('hack_sequence'), '${content}', 0,0, (SELECT ID FROM users WHERE username = '${user}'), (SELECT ID FROM Categories WHERE Name = '${category}'));`
 
@@ -65,7 +54,6 @@ controller.makeHack = (req, res, next) => {
       res.locals.data = rows
       return next()
     })
-  // return next()
 }
 
 // Post a new user to the database:
@@ -85,7 +73,7 @@ controller.makeUser = (req, res, next) => {
       return next()
     })
 }
-// http://localhost:8080/api/user/batman
+
 controller.getUser = (req, res, next) => {
   const name = req.params.user;
   console.log('name in getUser', name)
@@ -122,6 +110,9 @@ controller.changeUsername = (req, res, next) => {
 
 module.exports = controller
 
+
+
+/* Syntax for creating a new sql sequence in the terminal */
 // CREATE SEQUENCE user_sequence
 // start with 2
 // increment by 1
