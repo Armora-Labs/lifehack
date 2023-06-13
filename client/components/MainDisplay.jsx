@@ -1,48 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import HackCreator from './HackCreator';
-import NavBar from './NavBar';
+import Hack from './Hack'
+
+// Remove this if/when move Drop Down
 
 const MainDisplay = () => {
-  return <div className="displayContainer">Check Main Display</div>;
-
-  // Need to get the handleChange event info from NavBar passed here
-
   const [hacks, setHack] = useState([]);
+  const [value, setValue] = useState('');
 
-  const hackItems = [];
+  const handleChange = (event) => {
+    console.log('category has been changed')
+    event.preventDefault();
 
-  // Currently set up to rerender each time fetch is made
+    setValue(event.target.value); // should 'targe' be 'target'?
+    console.log(event.target.value);
+  };
+
+  async function getHacks() {
+    try {
+      const response = await fetch(`/api/${value}`);
+      const data = await response.json();
+      console.log(data);
+      setHack(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  // getHacks();
 
   useEffect(() => {
-    fetch('/api')
-      .then((response) => response.json())
-      .then((data) => setHack(data));
-  });
+    getHacks();
+  }, [value])
 
+    
+  const hackItems = [];
   for (let i = 0; i < hacks.length; i++) {
     hackItems.push(<Hack hacks={hacks[i]} />);
   }
 
-  return <div>{hackItems}</div>;
+  console.log('hacks', hacks);
+  console.log('hackItems', hackItems);
+
+  const CatSelector = () => {
+    return (
+      <>
+      <label>
+        Choose a category:
+        <select value={value} onChange={handleChange} className="categories">
+          <option value="Categories">Categories</option>
+          <option value="Codesmith">Codesmith</option>
+          <option value="Time">Time</option>
+          <option value="Money">Money</option>
+        </select>
+      </label>
+      <button onClick={() => console.log(hacks)}>show hacks</button>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <div className="catselector">
+        <CatSelector />
+      </div>
+      <div className='hack-items-container'>{hackItems}</div>
+    </>
+  );
 };
 
 export default MainDisplay;
 
-/* To Build List
-    Login Page 
-        - H1 Welcome to LifeHack
-        -login / create user OAuth path
-
-    Category Bar - functionality to  each category
-        - Associated Fetch request + event
-        - Event trigger to the hack display container
-
-
-    Hack Display Container
-        - in fetch request have it create individual child compenents for each hack
-            - each individual hack will have: like, down vote, edit, delete buttons
-
-    Refresh button associated with Hack Display Container?
-
-
-*/
