@@ -5,19 +5,21 @@ import HackCreator from './components/HackCreator';
 import MainDisplay from './components/MainDisplay';
 import { useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
+import { set } from 'lodash';
 
 const App = () => {
   // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
   const [user, setUser] = useState({});
   // id, username
 
-  function handleCallbackResponse(response) {
-    console.log('whole response: ', response);
-    console.log('Encoded JWT ID token: ' + response.credential);
+  async function handleCallbackResponse(response) {
+    // console.log('whole response: ', response);
+    // console.log('Encoded JWT ID token: ' + response.credential);
     const userObject = jwtDecode(response.credential);
-    console.log(userObject);
-    setUser(userObject);
+    console.log(userObject)
+    setUser(userObject)
     document.getElementById('signInDiv').hidden = true;
+    
   }
 
   function handleSignOut(event) {
@@ -45,7 +47,8 @@ const App = () => {
 
   async function makeUser(e) {
     e.preventDefault();
-    const name = document.getElementById('create-account-input').value;
+    const input = document.getElementById('create-account-input');
+    const name = input.value;
     const fetchProps = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,39 +59,32 @@ const App = () => {
     );
     console.log('New User; ', newUser[0]);
     setUser(newUser[0]);
+    input.value = '';
   }
 
   // async function loginUser() {}
+  
 
   // async function oauthUser() {}
 
-  const GoogleSignIn = () => {
-    return (
-      <div className="gsignin">
-        <h3>{user.username}</h3>
-        <div id="signInDiv"></div>
-        {Object.keys(user).length != 0 && (
-          <button id="signOutBttn" onClick={(e) => handleSignOut(e)}>
-            Sign Out
-          </button>
-        )}
-
-        {user && (
-          <div>
-            <img src={user.picture} />
-            <h3>{user.name}</h3>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <Router>
-      <GoogleSignIn />
+      <NavBar />
+      <h3>{user.username}</h3>
+      <div id="signInDiv"></div>
+      { Object.keys(user).length != 0 &&
+        <button id="signOutBttn" onClick={ e => handleSignOut(e)}>Sign Out</button>
+      }
+      
+      { user && 
+        <div>
+          <img src = {user.picture}/>
+          <h3>{user.name}</h3>
+        </div>
+      }
       <Switch>
         <Route path="/">
-          <Login makeUser={makeUser} />
+          <Login makeUser={makeUser} loginUser={loginUser}/>
         </Route>
         {/* <Route path="/dashboard" element={<Dashboard authed={true} />} /> */}
         {/* <Route path="/" element={<Login makeUser={makeUser}/>}/> */}
