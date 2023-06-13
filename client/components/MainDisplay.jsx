@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import HackCreator from './HackCreator';
 import Hack from './Hack'
 
-// Remove this if/when move Drop Down
-
 const MainDisplay = () => {
   const [hacks, setHack] = useState([]);
   const [value, setValue] = useState('');
 
+  // Event handler for main category dropdown //
   const handleChange = (event) => {
     console.log('category has been changed')
     event.preventDefault();
 
-    setValue(event.target.value); // should 'targe' be 'target'?
+    setValue(event.target.value); 
     console.log(event.target.value);
   };
 
+  // GET request to SQL for specific category hacks //
   async function getHacks() {
     try {
       const response = await fetch(`/api/${value}`);
@@ -26,21 +26,22 @@ const MainDisplay = () => {
       console.log(err);
     }
   }
-  // getHacks();
 
+  // Trigger for page rerender once Category change is detected. //
   useEffect(() => {
     getHacks();
   }, [value])
 
-    
+  
   const hackItems = [];
   for (let i = 0; i < hacks.length; i++) {
     hackItems.push(<Hack hacks={hacks[i]} />);
   }
 
-  console.log('hacks', hacks);
-  console.log('hackItems', hackItems);
+  // console.log('hacks', hacks);
+  // console.log('hackItems', hackItems);
 
+  // Category Dropdown Component //
   const CatSelector = () => {
     return (
       <>
@@ -53,11 +54,13 @@ const MainDisplay = () => {
           <option value="Money">Money</option>
         </select>
       </label>
-      <button onClick={() => console.log(hacks)}>show hacks</button>
+      
       </>
     );
   };
 
+
+  // Main Hack Display Container Component //
   return (
     <>
       <div className="catselector">

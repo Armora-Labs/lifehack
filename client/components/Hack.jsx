@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 const Hack = ({hacks}) => {
-  const { content, username, likes, dislikes } = hacks// useState({ hackItems });
+  const { content, username, likes, dislikes } = hacks
+
+  // creates individual hack boxes
 
   return (
     <div className="aHack">

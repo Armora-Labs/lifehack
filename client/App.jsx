@@ -8,26 +8,21 @@ import jwtDecode from 'jwt-decode';
 import { set } from 'lodash';
 
 const App = () => {
-  // const [value, setValue] = React.useState(['Categories', 'Codesmith', 'Time', 'Money']);
   const [user, setUser] = useState({})
-  // id, username
 
+  // FOR GOOGLE OAUTH
   async function handleCallbackResponse(response) {
-    // console.log('whole response: ', response);
-    // console.log('Encoded JWT ID token: ' + response.credential);
     const userObject = jwtDecode(response.credential);
-    // console.log(userObject);
     const googlename = userObject.name;
-    console.log('googlename', googlename);
     let googleuser;
+    // Check if the user exisits in the users table, he they do, set them to the current user
     googleuser = await fetch(`api/user/${googlename}`);
     const checkIfUserExists = await googleuser.json();
-    // console.log('response in handlecallback', scheckIfUserExists);
     if (checkIfUserExists.length > 0) {
-      console.log('user already exists')
       document.getElementById('signInDiv').hidden = true;
       setUser(checkIfUserExists[0]);
     }
+    // Create a new user and set them to the current user
     else {
       const fetchProps = {
         method: 'POST',
@@ -36,34 +31,31 @@ const App = () => {
       };
       const responseFromCreatingUser = await fetch(`api/user/`, fetchProps);
       googleuser = await responseFromCreatingUser.json();
-      console.log('googleuser', googleuser[0]);
       document.getElementById('signInDiv').hidden = true;
       setUser(googleuser[0]);
     } 
   }
-
   function handleSignOut(event) {
     setUser({});
     document.getElementById("signInDiv").hidden = false;
   }
-
   useEffect(() => {
+    // These google objects came from a script tag which can be found in index.html
     /* global google */
     google.accounts.id.initialize({
       client_id: '745677008135-28koou137ibajp5jnjalltuu1slpbsde.apps.googleusercontent.com',
       callback: handleCallbackResponse
     });
-
     google.accounts.id.renderButton(
       document.getElementById('signInDiv'),
       {theme: 'outline', size: 'large'}
     );
-
     google.accounts.id.prompt();
   }, []);
-  // If we have no user: sign in button
-  // If we have a user: show the log out button
+  // END GOOGLE OAUTH
 
+
+  
   async function makeUser(e) {
     e.preventDefault();
     const input = document.getElementById('create-account-input');
@@ -74,7 +66,6 @@ const App = () => {
       body: JSON.stringify({name})
     };
     const newUser = await fetch('/api/user', fetchProps).then(ans => ans.json());
-    console.log('New User; ', newUser[0]);
     setUser(newUser[0]);
     input.value = '';
   }
@@ -84,7 +75,6 @@ const App = () => {
     const input = document.getElementById('login-account-input');
     const response = await fetch(`/api/user/${input.value}`)
     const user = await response.json();
-    console.log('Logged in user: ', user[0]);
     setUser(user[0]);
     input.value = '';
   }
@@ -106,8 +96,6 @@ const App = () => {
     setUser(displayNameAfter[0]);
     input.value = '';
   }
-
-
 
   return (
     <Router>
@@ -131,17 +119,10 @@ const App = () => {
         <Route path="/">
           <Login makeUser={makeUser} loginUser={loginUser}/>
         </Route>
-        {/* <Route path="/dashboard" element={<Dashboard authed={true} />} /> */}
-        {/* <Route path="/" element={<Login makeUser={makeUser}/>}/> */}
-          {/* <Route path="/" component={Login} makeUser={makeUser}/> */}
-          {/* <Route path="/base" component={MainDisplay} />
-          <Route path="/create" component={CreateHack} />
-          <Route path="/categories" component={Login} />  */}
       </Switch>
       <MainDisplay class='hack-items-container' />
       <HackCreator user={user}/>
     </Router>
-    // <mainContainer />
   );
 };
 
